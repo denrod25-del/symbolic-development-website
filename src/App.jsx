@@ -241,28 +241,49 @@ function CountUp({ value, suffix="", duration=1200 }) {
   const ref=useRef(null);
   const reduced=usePrefersReducedMotion();
   const numeric=Number(String(value).replace(/[^\d.]/g,""));
-  const isNumeric=Number.isFinite(numeric) && String(value).match(/^\d/);
-  const [display,setDisplay]=useState(isNumeric ? (reduced ? String(value) : "0") : String(value));
+  const isNumeric=Number.isFinite(numeric) && /^\d/.test(String(value));
+  const [display,setDisplay]=useState(()=>isNumeric && !reduced ? "0" : String(value));
   useEffect(()=>{
-    if (!isNumeric) { setDisplay(String(value)); return undefined; }
-    if (reduced) { setDisplay(String(value)); return undefined; }
+    if (!isNumeric || reduced) {
+      setDisplay(String(value));
+      return undefined;
+    }
     const node=ref.current;
     if (!node) return undefined;
-    let frame=0; let start=0; let active=false;
+    let frame=0;
+    let start=0;
+    let running=false;
+    const finish=()=>setDisplay(String(value));
     const animate=(timestamp)=>{
       if (!start) start=timestamp;
       const progress=Math.min((timestamp-start)/duration,1);
       const eased=1-Math.pow(1-progress,3);
-      const current=Math.round(numeric*eased);
-      setDisplay(`${current}${suffix}`);
+      setDisplay(`${Math.round(numeric*eased)}${suffix}`);
       if (progress<1) frame=requestAnimationFrame(animate);
-      else setDisplay(String(value));
+      else finish();
     };
+    const play=()=>{
+      if (running) return;
+      running=true;
+      start=0;
+      frame=requestAnimationFrame(animate);
+    };
+    const inView=()=>{
+      const rect=node.getBoundingClientRect();
+      return rect.top < window.innerHeight * 0.92 && rect.bottom > window.innerHeight * 0.08;
+    };
+    if (inView()) play();
     const observer=new IntersectionObserver(([entry])=>{
-      if (entry.isIntersecting && !active) { active=true; frame=requestAnimationFrame(animate); observer.disconnect(); }
-    },{ threshold:0.5 });
-    observer.observe(node);
-    return()=>{ observer.disconnect(); cancelAnimationFrame(frame); };
+      if (entry.isIntersecting) {
+        play();
+        observer.disconnect();
+      }
+    },{ threshold:0.2, rootMargin:"0px 0px -8% 0px" });
+    if (!running) observer.observe(node);
+    return()=>{
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   },[value,suffix,duration,isNumeric,numeric,reduced]);
   return <strong ref={ref}>{display}</strong>;
 }
