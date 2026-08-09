@@ -208,6 +208,65 @@ function ButtonLink({ href,children,primary=false }) { return <SiteLink classNam
 function VisuallyHidden({ children }) { return <span className="visually-hidden">{children}</span>; }
 function LiveProductLink({ product,className="" }) { return product.liveHref ? <SiteLink className={className} href={product.liveHref} target="_blank" rel="noopener noreferrer" onClick={()=>trackEvent("live_product_opened",{product:product.name})}>Visit live product <VisuallyHidden> (opens in new tab)</VisuallyHidden><ArrowUpRight size={17}/></SiteLink> : null; }
 
+function usePrefersReducedMotion() {
+  const [reduced,setReduced]=useState(()=>typeof window!=="undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  useEffect(()=>{
+    const media=window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update=()=>setReduced(media.matches);
+    update();
+    media.addEventListener("change",update);
+    return()=>media.removeEventListener("change",update);
+  },[]);
+  return reduced;
+}
+
+function Reveal({ children, className="", as:Tag="div", delay=0, stagger=false, ...props }) {
+  const ref=useRef(null);
+  const reduced=usePrefersReducedMotion();
+  const [visible,setVisible]=useState(reduced);
+  useEffect(()=>{
+    if (reduced) { setVisible(true); return undefined; }
+    const node=ref.current;
+    if (!node) return undefined;
+    const observer=new IntersectionObserver(([entry])=>{
+      if (entry.isIntersecting) { setVisible(true); observer.disconnect(); }
+    },{ threshold:0.16, rootMargin:"0px 0px -8% 0px" });
+    observer.observe(node);
+    return()=>observer.disconnect();
+  },[reduced]);
+  return <Tag ref={ref} className={`reveal ${stagger ? "reveal-stagger" : ""} ${visible ? "is-visible" : ""} ${className}`.trim()} style={delay ? { "--reveal-delay":`${delay}ms` } : undefined} {...props}>{children}</Tag>;
+}
+
+function CountUp({ value, suffix="", duration=1200 }) {
+  const ref=useRef(null);
+  const reduced=usePrefersReducedMotion();
+  const numeric=Number(String(value).replace(/[^\d.]/g,""));
+  const isNumeric=Number.isFinite(numeric) && String(value).match(/^\d/);
+  const [display,setDisplay]=useState(isNumeric ? (reduced ? String(value) : "0") : String(value));
+  useEffect(()=>{
+    if (!isNumeric) { setDisplay(String(value)); return undefined; }
+    if (reduced) { setDisplay(String(value)); return undefined; }
+    const node=ref.current;
+    if (!node) return undefined;
+    let frame=0; let start=0; let active=false;
+    const animate=(timestamp)=>{
+      if (!start) start=timestamp;
+      const progress=Math.min((timestamp-start)/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      const current=Math.round(numeric*eased);
+      setDisplay(`${current}${suffix}`);
+      if (progress<1) frame=requestAnimationFrame(animate);
+      else setDisplay(String(value));
+    };
+    const observer=new IntersectionObserver(([entry])=>{
+      if (entry.isIntersecting && !active) { active=true; frame=requestAnimationFrame(animate); observer.disconnect(); }
+    },{ threshold:0.5 });
+    observer.observe(node);
+    return()=>{ observer.disconnect(); cancelAnimationFrame(frame); };
+  },[value,suffix,duration,isNumeric,numeric,reduced]);
+  return <strong ref={ref}>{display}</strong>;
+}
+
 function ProductScreenshot({ product,className="" }) {
   const hostname=new URL(product.liveHref).hostname.replace(/^www\./,"");
   return <figure className={`product-screenshot ${className}`}>
@@ -242,12 +301,32 @@ function Navigation({ location }) {
 }
 
 function Hero() {
-  return <section className="hero" id="top"><img className="hero-art" src="/assets/hero-monolith-960.webp" srcSet="/assets/hero-monolith-640.webp 640w, /assets/hero-monolith-960.webp 960w, /assets/hero-monolith-1254.webp 1254w" sizes="(max-width: 760px) 105vw, (max-width: 1040px) 70vw, (min-width: 1440px) 880px, 61vw" width="1254" height="1254" loading="eager" decoding="sync" fetchPriority="high" alt="Faceted black metal architectural monolith" /><div className="hero-copy"><SectionLabel>PRODUCT + ENGINEERING</SectionLabel><h1>Software for<br/>decisions that<br/><span>matter.</span></h1><p>We design and engineer operational platforms, intelligence products, and automation systems built for real-world complexity.</p><div className="hero-actions"><ButtonLink href="/booking" primary>Book a working session</ButtonLink><ButtonLink href="/work">See the proof</ButtonLink></div></div><div className="hero-meta"><span>07 LIVE PRODUCTS</span><span>WEB · MOBILE · DESKTOP</span></div></section>;
+  return <section className="hero" id="top">
+    <div className="hero-backdrop" aria-hidden="true">
+      <img className="hero-art" src="/assets/hero-monolith-960.webp" srcSet="/assets/hero-monolith-640.webp 640w, /assets/hero-monolith-960.webp 960w, /assets/hero-monolith-1254.webp 1254w" sizes="100vw" width="1254" height="1254" loading="eager" decoding="sync" fetchPriority="high" alt="" />
+      <div className="hero-fade" />
+    </div>
+    <div className="hero-copy">
+      <Reveal className="hero-copy-inner" stagger>
+        <SectionLabel>PRODUCT + ENGINEERING</SectionLabel>
+        <h1>Software for<br/>decisions that<br/><span>matter.</span></h1>
+        <p>We design and engineer operational platforms, intelligence products, and automation systems built for real-world complexity.</p>
+        <div className="hero-actions"><ButtonLink href="/booking" primary>Book a working session</ButtonLink><ButtonLink href="/work">See the proof</ButtonLink></div>
+      </Reveal>
+    </div>
+  </section>;
 }
 
 function TrustStrip() {
   const proof=[["07","LIVE PRODUCTS"],["03","PLATFORM SURFACES"],["35","AUTOMATED TESTS — CLAWMONITOR"],["67","FLORIDA COUNTIES — DEEDSCOUT"]];
-  return <section className="trust-strip" aria-label="Demonstrable product proof">{proof.map(([value,label])=><div key={label}><strong>{value}</strong><span>{label}</span></div>)}</section>;
+  return <section className="trust-strip" aria-label="Demonstrable product proof">
+    {proof.map(([value,label],index)=>(
+      <Reveal as="div" className="trust-item" key={label} delay={index*80}>
+        <CountUp value={value} />
+        <span>{label}</span>
+      </Reveal>
+    ))}
+  </section>;
 }
 
 function BuyerSituations() {
@@ -257,7 +336,21 @@ function BuyerSituations() {
     ["03","Automate operations","Connect fragmented workflows, approvals, data, and AI into a dependable operating layer."],
     ["04","Strengthen a team","Add senior product and engineering judgment where consequential decisions need clear ownership."],
   ];
-  return <section className="buyer-situations section reveal-section"><SectionLabel>WHERE WE CREATE LEVERAGE</SectionLabel><div className="section-heading"><h2>Start with the business situation.</h2><p>Capabilities matter when they are attached to the decision, constraint, or operating problem your team needs to solve.</p></div><div className="situation-grid">{situations.map(([number,title,body])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{body}</p><SiteLink href={`/booking?engagement=${encodeURIComponent(title)}`}>Book a focused conversation <ArrowUpRight size={15}/></SiteLink></article>)}</div></section>;
+  return <section className="buyer-situations section">
+    <Reveal>
+      <SectionLabel>WHERE WE CREATE LEVERAGE</SectionLabel>
+      <div className="section-heading"><h2>Start with the business situation.</h2><p>Capabilities matter when they are attached to the decision, constraint, or operating problem your team needs to solve.</p></div>
+    </Reveal>
+    <div className="situation-list">
+      {situations.map(([number,title,body],index)=>(
+        <Reveal as="article" key={number} delay={index*70}>
+          <span>{number}</span>
+          <div><h3>{title}</h3><p>{body}</p></div>
+          <SiteLink href={`/booking?engagement=${encodeURIComponent(title)}`}>Book a focused conversation <ArrowUpRight size={15}/></SiteLink>
+        </Reveal>
+      ))}
+    </div>
+  </section>;
 }
 
 function EngagementModels() {
@@ -267,7 +360,22 @@ function EngagementModels() {
     ["03","System modernization","Software carrying technical or UX debt","A prioritized audit followed by targeted redesign, migration, and hardening."],
     ["04","Engineering partnership","Products needing sustained senior support","Continuous delivery, observability, and accountable technical leadership."],
   ];
-  return <section className="engagement-models section reveal-section"><div><SectionLabel>ENGAGEMENT MODELS</SectionLabel><h2>A clear way<br/>to begin.</h2><p>Every engagement starts by reducing uncertainty, defining ownership, and agreeing on the evidence that will demonstrate progress.</p></div><div className="engagement-model-list">{models.map(([number,title,bestFor,outcome])=><article key={number}><span>{number}</span><div><h3>{title}</h3><small>BEST FOR</small><p>{bestFor}</p></div><div><small>INITIAL OUTCOME</small><p>{outcome}</p><SiteLink className="engagement-model-cta" href={`/booking?engagement=${encodeURIComponent(title)}`}>Discuss this model <ArrowRight size={15}/></SiteLink></div></article>)}</div></section>;
+  return <section className="engagement-models section">
+    <Reveal>
+      <SectionLabel>ENGAGEMENT MODELS</SectionLabel>
+      <h2>A clear way<br/>to begin.</h2>
+      <p>Every engagement starts by reducing uncertainty, defining ownership, and agreeing on the evidence that will demonstrate progress.</p>
+    </Reveal>
+    <div className="engagement-model-list">
+      {models.map(([number,title,bestFor,outcome],index)=>(
+        <Reveal as="article" key={number} delay={index*70}>
+          <span>{number}</span>
+          <div><h3>{title}</h3><small>BEST FOR</small><p>{bestFor}</p></div>
+          <div><small>INITIAL OUTCOME</small><p>{outcome}</p><SiteLink className="engagement-model-cta" href={`/booking?engagement=${encodeURIComponent(title)}`}>Discuss this model <ArrowRight size={15}/></SiteLink></div>
+        </Reveal>
+      ))}
+    </div>
+  </section>;
 }
 
 function AuditDashboard() {
@@ -301,28 +409,106 @@ function SystemDashboard({ productName }) {
 
 function ProductSection() {
   const [product,setProduct]=useState(products[0]);
-  const tabRefs=useRef([]);
-  const activateByIndex=index=>{ setProduct(products[index]); tabRefs.current[index]?.focus(); };
-  const handleTabKey=(event,index)=>{
-    const keys={ArrowRight:(index+1)%products.length,ArrowLeft:(index-1+products.length)%products.length,Home:0,End:products.length-1};
+  const railRefs=useRef([]);
+  const activateByIndex=index=>{ setProduct(products[index]); railRefs.current[index]?.focus(); };
+  const handleRailKey=(event,index)=>{
+    const keys={ArrowDown:(index+1)%products.length,ArrowUp:(index-1+products.length)%products.length,Home:0,End:products.length-1,ArrowRight:(index+1)%products.length,ArrowLeft:(index-1+products.length)%products.length};
     if(keys[event.key]===undefined) return;
     event.preventDefault();
     activateByIndex(keys[event.key]);
   };
   const selectedIndex=products.findIndex(item=>item.name===product.name);
-  return <section className="product-section section reveal-section" id="work"><div className="product-section-intro"><SectionLabel>LIVE PRODUCT PROOF</SectionLabel><p>Seven working products across public information, operational intelligence, developer tooling, and game engineering.</p></div><div className="product-tabs" role="tablist" aria-label="Featured products">{products.map((item,index)=><button type="button" id={`product-tab-${index}`} role="tab" aria-controls="featured-product-panel" aria-selected={product.name===item.name} tabIndex={product.name===item.name?0:-1} ref={node=>{tabRefs.current[index]=node;}} className={product.name===item.name?"active":""} onKeyDown={event=>handleTabKey(event,index)} onClick={()=>setProduct(item)} key={item.name}>{item.name}</button>)}</div><div className="product-grid" id="featured-product-panel" role="tabpanel" aria-labelledby={`product-tab-${selectedIndex}`}><div className="product-copy"><span className="product-category">{product.category}</span><h2>{product.name}</h2><p>{product.description}</p><div className="product-scope">{product.scope.map(item=><span key={item}>{item}</span>)}</div><div className="product-metric"><small>{product.label.toUpperCase()}</small><strong>{product.metric}</strong><span><CheckCircle size={15} weight="fill"/> Publicly verifiable</span></div><div className="product-links"><SiteLink className="text-link" href={product.href}>Read the case study<ArrowRight size={18}/></SiteLink><LiveProductLink product={product} className="live-product-link"/></div></div><ProductScreenshot key={product.name} product={product}/></div></section>;
+  return <section className="product-section section" id="work">
+    <Reveal className="product-section-intro">
+      <SectionLabel>LIVE PRODUCT PROOF</SectionLabel>
+      <p>Seven working products across public information, operational intelligence, developer tooling, and game engineering.</p>
+    </Reveal>
+    <Reveal className="product-stage" stagger>
+      <div className="product-rail" role="tablist" aria-label="Featured products" aria-orientation="vertical">
+        {products.map((item,index)=>(
+          <button
+            type="button"
+            id={`product-tab-${index}`}
+            role="tab"
+            aria-controls="featured-product-panel"
+            aria-selected={product.name===item.name}
+            tabIndex={product.name===item.name?0:-1}
+            ref={node=>{railRefs.current[index]=node;}}
+            className={product.name===item.name?"active":""}
+            onKeyDown={event=>handleRailKey(event,index)}
+            onClick={()=>setProduct(item)}
+            key={item.name}
+          >
+            <span className="product-rail-index">{String(index+1).padStart(2,"0")}</span>
+            <span className="product-rail-name">{item.name}</span>
+            <span className="product-rail-category">{item.category}</span>
+          </button>
+        ))}
+      </div>
+      <div className="product-preview" id="featured-product-panel" role="tabpanel" aria-labelledby={`product-tab-${selectedIndex}`}>
+        <div className="product-copy">
+          <span className="product-category">{product.category}</span>
+          <h2>{product.name}</h2>
+          <p>{product.description}</p>
+          <div className="product-scope">{product.scope.map(item=><span key={item}>{item}</span>)}</div>
+          <div className="product-metric"><small>{product.label.toUpperCase()}</small><strong>{product.metric}</strong><span><CheckCircle size={15} weight="fill"/> Publicly verifiable</span></div>
+          <div className="product-links"><SiteLink className="text-link" href={product.href}>Read the case study<ArrowRight size={18}/></SiteLink><LiveProductLink product={product} className="live-product-link"/></div>
+        </div>
+        <ProductScreenshot key={product.name} product={product}/>
+      </div>
+    </Reveal>
+  </section>;
 }
 
 function ServicesPreview() {
-  return <section className="services section reveal-section" id="services"><SectionLabel>WHAT WE DO</SectionLabel><div className="services-intro"><h2>Complex problems.<br/>Considered solutions.</h2><p>We partner with organizations to design, build, and evolve software that’s secure, scalable, and built to last.</p></div><div className="services-grid">{serviceCatalog.slice(0,3).map(({icon:Icon,title,body})=><article key={title}><Icon size={42} weight="thin"/><div><h3>{title}</h3><p>{body}</p><SiteLink href="/services">Explore {title.toLowerCase()} <ArrowRight size={15}/></SiteLink></div></article>)}</div></section>;
+  return <section className="services section" id="services">
+    <Reveal>
+      <SectionLabel>WHAT WE DO</SectionLabel>
+      <div className="services-intro"><h2>Complex problems.<br/>Considered solutions.</h2><p>We partner with organizations to design, build, and evolve software that’s secure, scalable, and built to last.</p></div>
+    </Reveal>
+    <div className="services-grid">
+      {serviceCatalog.slice(0,3).map(({icon:Icon,title,body},index)=>(
+        <Reveal as="article" key={title} delay={index*90}>
+          <Icon size={42} weight="thin"/>
+          <div><h3>{title}</h3><p>{body}</p><SiteLink href="/services">Explore {title.toLowerCase()} <ArrowRight size={15}/></SiteLink></div>
+        </Reveal>
+      ))}
+    </div>
+  </section>;
 }
 
 function Approach() {
   const steps=[["01","Discover","Clarify goals, constraints, users, and the measure of success."],["02","Architect","Shape resilient systems, interfaces, and delivery plans."],["03","Build","Engineer in focused increments with quality visible throughout."],["04","Evolve","Measure, refine, and extend without compromising the foundation."]];
-  return <section className="approach section reveal-section" id="approach"><SectionLabel>OUR APPROACH</SectionLabel><div className="section-heading"><h2>Intent at every stage.</h2><p>A clear engineering process keeps ambition aligned with dependable delivery.</p></div><div className="process-line">{steps.map(([n,title,body])=><article key={n}><span>{n}</span><h3>{title}</h3><p>{body}</p></article>)}</div></section>;
+  return <section className="approach section" id="approach">
+    <Reveal>
+      <SectionLabel>OUR APPROACH</SectionLabel>
+      <div className="section-heading"><h2>Intent at every stage.</h2><p>A clear engineering process keeps ambition aligned with dependable delivery.</p></div>
+    </Reveal>
+    <ol className="process-timeline">
+      {steps.map(([n,title,body],index)=>(
+        <Reveal as="li" key={n} delay={index*90}>
+          <span className="process-node" aria-hidden="true" />
+          <span className="process-index">{n}</span>
+          <h3>{title}</h3>
+          <p>{body}</p>
+        </Reveal>
+      ))}
+    </ol>
+  </section>;
 }
 
-function Technology() { return <section className="technology section reveal-section"><div><SectionLabel>ENGINEERED FOR LONGEVITY</SectionLabel><h2>Modern technology.<br/>Pragmatic choices.</h2></div><div className="tech-grid">{technologies.map(([Icon,label])=><div key={label}><Icon size={24} weight="thin"/><span>{label}</span></div>)}</div></section>; }
+function Technology() {
+  return <section className="technology section">
+    <Reveal>
+      <SectionLabel>ENGINEERED FOR LONGEVITY</SectionLabel>
+      <h2>Modern technology.<br/>Pragmatic choices.</h2>
+    </Reveal>
+    <Reveal className="tech-strip" aria-label="Technology stack" stagger>
+      {technologies.map(([,label])=><span key={label}>{label}</span>)}
+    </Reveal>
+  </section>;
+}
+
 function ProductProof() {
   const items=[
     ["AuditScout","A public beta turns a URL into a prioritized report across more than twelve checks."],
@@ -330,14 +516,40 @@ function ProductProof() {
     ["ClawMonitor","An MIT-licensed Windows observability tool protected by thirty-five automated tests."],
     ["Lava Leap","A no-account browser and Android game with ten connected gameplay systems."],
   ];
-  return <section className="product-proof section reveal-section" id="insights"><div><SectionLabel>PROOF OVER PROMISES</SectionLabel><h2>Working software is the credential.</h2><p>Until client references are published, the strongest evidence is inspectable: live products, public source, visible product states, and grounded release facts.</p><SiteLink className="text-link" href="/work">Explore all seven products <ArrowRight size={18}/></SiteLink></div><div className="product-proof-list">{items.map(([name,body],index)=><article key={name}><span>{String(index+1).padStart(2,"0")}</span><div><h3>{name}</h3><p>{body}</p></div></article>)}</div></section>;
+  return <section className="product-proof section" id="insights">
+    <Reveal>
+      <SectionLabel>PROOF OVER PROMISES</SectionLabel>
+      <h2>Working software is the credential.</h2>
+      <p>Until client references are published, the strongest evidence is inspectable: live products, public source, visible product states, and grounded release facts.</p>
+      <SiteLink className="text-link" href="/work">Explore all seven products <ArrowRight size={18}/></SiteLink>
+    </Reveal>
+    <div className="product-proof-list">
+      {items.map(([name,body],index)=>(
+        <Reveal as="article" key={name} delay={index*70}>
+          <span>{String(index+1).padStart(2,"0")}</span>
+          <div><h3>{name}</h3><p>{body}</p></div>
+        </Reveal>
+      ))}
+    </div>
+  </section>;
 }
 
 function Contact() {
   const [status,setStatus]=useState("idle"); const [error,setError]=useState(""); const [startedAt,setStartedAt]=useState(()=>Date.now());
   const send=async event=>{event.preventDefault();const form=event.currentTarget;setStatus("sending");setError("");try{await submitLead(form,"contact");trackEvent("contact_submitted");setStatus("sent");}catch(reason){setError(reason.message);setStatus("error");}};
   const reset=()=>{setStatus("idle");setError("");setStartedAt(Date.now());};
-  return <section className="contact section reveal-section" id="contact"><div className="contact-copy"><SectionLabel>DISCUSS A SYSTEM</SectionLabel><h2>Bring us the<br/>difficult problem.</h2><p>Share the decision, workflow, or product your team needs to improve. We’ll respond with a practical first step—not a generic sales sequence.</p><div className="contact-expectation"><span>01</span><p>We review the context and identify the right engagement shape.</p><span>02</span><p>If there is a fit, we prepare a focused working session.</p><span>03</span><p>You leave with clearer options, even before a build begins.</p></div><div className="contact-details"><a href="mailto:hello@symbolicdevelopment.com">hello@symbolicdevelopment.com</a><SiteLink href="/booking">Request a working session <CalendarBlank size={15}/></SiteLink></div></div>{status==="sent"?<div className="success-message" role="status"><CheckCircle size={34} weight="thin"/><h3>Context received.</h3><p>We’ll respond within one business day with a practical next step.</p><button type="button" onClick={reset}>Send another</button></div>:<form onSubmit={send}><input type="hidden" name="startedAt" value={startedAt}/><label className="form-trap" hidden aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off"/></label><div className="form-row"><label>Name<input required minLength="2" maxLength="80" name="name" autoComplete="name" placeholder="Your name"/></label><label>Email<input required type="email" maxLength="160" name="email" autoComplete="email" placeholder="you@company.com"/></label></div><label>Company <span className="optional">OPTIONAL</span><input maxLength="120" name="company" autoComplete="organization" placeholder="Company or organization"/></label><div className="form-row"><label>Project stage<select required name="stage" defaultValue=""><option value="" disabled>Select stage</option><option>Exploring an opportunity</option><option>Defining a new product</option><option>Ready to build</option><option>Modernizing an existing system</option><option>Looking for ongoing engineering support</option></select></label><label>Preferred start<select required name="timeline" defaultValue=""><option value="" disabled>Select timing</option><option>As soon as possible</option><option>Within 1–2 months</option><option>Within 3–6 months</option><option>Planning for later</option></select></label></div><div className="form-row"><label>Engagement<select required name="engagement" defaultValue=""><option value="" disabled>Select engagement</option><option>Product foundation</option><option>Focused build</option><option>System modernization</option><option>Engineering partnership</option><option>Not sure yet</option></select></label><label>Investment range<select required name="budget" defaultValue=""><option value="" disabled>Select range</option><option>Under $15k</option><option>$15k–$40k</option><option>$40k–$100k</option><option>$100k+</option><option>Need help scoping</option></select></label></div><label>What decision or system needs to improve?<textarea required minLength="20" maxLength="4000" name="message" rows="4" placeholder="Describe the current situation, the people affected, and what a successful outcome would change."/></label>{error&&<p className="form-error" role="alert">{error} <a href="mailto:hello@symbolicdevelopment.com">Email us directly.</a></p>}<button className="button button-primary" type="submit" disabled={status==="sending"}><span>{status==="sending"?"Sending…":"Send project context"}</span><ArrowUpRight size={16}/></button><small className="form-privacy">By sending, you agree to our <SiteLink href="/privacy">privacy notice</SiteLink>.</small></form>}</section>;
+  return <section className="contact section" id="contact">
+    <Reveal className="contact-copy">
+      <SectionLabel>DISCUSS A SYSTEM</SectionLabel>
+      <h2>Bring us the<br/>difficult problem.</h2>
+      <p>Share the decision, workflow, or product your team needs to improve. We’ll respond with a practical first step—not a generic sales sequence.</p>
+      <div className="contact-expectation"><span>01</span><p>We review the context and identify the right engagement shape.</p><span>02</span><p>If there is a fit, we prepare a focused working session.</p><span>03</span><p>You leave with clearer options, even before a build begins.</p></div>
+      <div className="contact-details"><a href="mailto:hello@symbolicdevelopment.com">hello@symbolicdevelopment.com</a><SiteLink href="/booking">Request a working session <CalendarBlank size={15}/></SiteLink></div>
+    </Reveal>
+    <Reveal delay={120}>
+      {status==="sent"?<div className="success-message" role="status"><CheckCircle size={34} weight="thin"/><h3>Context received.</h3><p>We’ll respond within one business day with a practical next step.</p><button type="button" onClick={reset}>Send another</button></div>:<form onSubmit={send}><input type="hidden" name="startedAt" value={startedAt}/><label className="form-trap" hidden aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off"/></label><div className="form-row"><label>Name<input required minLength="2" maxLength="80" name="name" autoComplete="name" placeholder="Your name"/></label><label>Email<input required type="email" maxLength="160" name="email" autoComplete="email" placeholder="you@company.com"/></label></div><label>Company <span className="optional">OPTIONAL</span><input maxLength="120" name="company" autoComplete="organization" placeholder="Company or organization"/></label><div className="form-row"><label>Project stage<select required name="stage" defaultValue=""><option value="" disabled>Select stage</option><option>Exploring an opportunity</option><option>Defining a new product</option><option>Ready to build</option><option>Modernizing an existing system</option><option>Looking for ongoing engineering support</option></select></label><label>Preferred start<select required name="timeline" defaultValue=""><option value="" disabled>Select timing</option><option>As soon as possible</option><option>Within 1–2 months</option><option>Within 3–6 months</option><option>Planning for later</option></select></label></div><div className="form-row"><label>Engagement<select required name="engagement" defaultValue=""><option value="" disabled>Select engagement</option><option>Product foundation</option><option>Focused build</option><option>System modernization</option><option>Engineering partnership</option><option>Not sure yet</option></select></label><label>Investment range<select required name="budget" defaultValue=""><option value="" disabled>Select range</option><option>Under $15k</option><option>$15k–$40k</option><option>$40k–$100k</option><option>$100k+</option><option>Need help scoping</option></select></label></div><label>What decision or system needs to improve?<textarea required minLength="20" maxLength="4000" name="message" rows="4" placeholder="Describe the current situation, the people affected, and what a successful outcome would change."/></label>{error&&<p className="form-error" role="alert">{error} <a href="mailto:hello@symbolicdevelopment.com">Email us directly.</a></p>}<button className="button button-primary" type="submit" disabled={status==="sending"}><span>{status==="sending"?"Sending…":"Send project context"}</span><ArrowUpRight size={16}/></button><small className="form-privacy">By sending, you agree to our <SiteLink href="/privacy">privacy notice</SiteLink>.</small></form>}
+    </Reveal>
+  </section>;
 }
 
 function PageHero({eyebrow,title,copy,meta}) { return <section className="page-hero"><div className="reveal-section"><SectionLabel>{eyebrow}</SectionLabel><h1>{title}</h1><p>{copy}</p></div><div className="page-hero-meta"><span>{meta}</span><span>SYMBOLIC DEVELOPMENT</span></div></section>; }

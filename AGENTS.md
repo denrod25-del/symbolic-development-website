@@ -10,6 +10,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 ## Durable Project Decisions
 
+- Homepage redesign (ported from the symbolic-redesign concept): full-bleed hero with the monolith as a fading background plane; proof stats live below the fold in a hairline band with count-up; featured products use a numbered vertical rail plus preview panel; business situations are numbered hairline rows; approach is a connected timeline; tech stack is a mono strip; type uses a 5-step scale with AA-safe muted gray; homepage sections use staggered reveal-on-scroll (respecting reduced motion).
 - Domain configuration is intentionally deferred until the user provides the final domain.
 - Phase 2 extends the selected Option 1 visual system into a multi-page client-acquisition flow while preserving the homepage as the visual source of truth.
 - Phase 3 completes the portfolio with dedicated StormRadar, WIYW, and DeedScout case studies and product-specific dashboard states.
