@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const clientDir = path.join(root, "dist", "client");
 const sourceHtml = readFileSync(path.join(clientDir, "index.html"), "utf8");
-const base = "https://symbolic-development-design-system.vercel.app";
+const base = "https://symbolicdev.com";
 
 const routes = {
   "/": ["Symbolic Development — Software Built to Endure", "Elegant, reliable software and infrastructure engineered with purpose.", "/assets/og/home.webp"],

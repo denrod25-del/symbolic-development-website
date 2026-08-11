@@ -4,7 +4,7 @@ The production website and design-system implementation for Symbolic Development
 
 ## Live site
 
-[symbolic-development-design-system.vercel.app](https://symbolic-development-design-system.vercel.app)
+[symbolicdev.com](https://symbolicdev.com)
 
 ## Stack
 

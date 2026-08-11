@@ -73,7 +73,7 @@ const insights = [
   ]},
 ];
 
-const siteBase = "https://symbolic-development-design-system.vercel.app";
+const siteBase = "https://symbolicdev.com";
 
 function trackEvent(name,details={}) {
   if (typeof window.va === "function") window.va("event",{name,...details});

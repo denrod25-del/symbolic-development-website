@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://symbolic-development-design-system.vercel.app/sitemap.xml
+Sitemap: https://symbolicdev.com/sitemap.xml
