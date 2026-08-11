@@ -27,7 +27,14 @@ test("validates inquiry fields",async()=>{
 
 test("keeps valid requests gated until delivery is configured",async()=>{
   const response=responseMock();
-  await handler({method:"POST",headers:{"x-forwarded-for":"192.0.2.3"},body:{startedAt:Date.now()-2000,name:"Alex Morgan",email:"alex@example.com",company:"Meridian",message:"We need help replacing a brittle operational workflow with dependable software."}},response);
+  await handler({method:"POST",headers:{"x-forwarded-for":"192.0.2.3"},body:{startedAt:Date.now()-2000,name:"Alex Morgan",email:"alex@example.com",company:"Meridian",stage:"Ready to build",timeline:"Within 1–2 months",engagement:"Focused build",budget:"$40k–$100k",message:"We need help replacing a brittle operational workflow with dependable software."}},response);
   assert.equal(response.statusCode,503);
   assert.match(response.body.message,/delivery is being connected/i);
+});
+
+test("requires inquiry qualification fields",async()=>{
+  const response=responseMock();
+  await handler({method:"POST",headers:{"x-forwarded-for":"192.0.2.4"},body:{startedAt:Date.now()-2000,name:"Alex Morgan",email:"alex@example.com",message:"We need help replacing a brittle operational workflow with dependable software."}},response);
+  assert.equal(response.statusCode,400);
+  assert.match(response.body.message,/project stage/i);
 });

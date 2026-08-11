@@ -29,3 +29,7 @@ npm run test:contact
 ```
 
 The production build prerenders route-specific metadata, generates the Sites-compatible output, and includes responsive product imagery, structured data, and accessible client-acquisition flows.
+
+## Email delivery
+
+Contact and booking requests use the server-side `/api/contact` route. Configure the variables listed in `.env.example` in Vercel for production email delivery. The endpoint remains intentionally unavailable when any required variable is missing.
