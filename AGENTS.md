@@ -10,6 +10,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 ## Durable Project Decisions
 
+- Homepage redesign source of truth: `denrod25-del/test-snake` PR #6 `symbolic-redesign/` (ported into `src/`). Anatomy: fading monolith hero with one primary CTA + text link + live-status line; carbon hairline stats band with count-up; numbered product rail + preview shell (status pills, facts, crossfade; mobile chip row with edge fade); situation hairline rows; connected approach timeline; sticky engagement intro; “Built with” mono strip; `--ink-2: #b4b4b4` for AA small text; blue reserved for interactive accents; green/amber for live/beta status; staggered reveal-on-scroll. Keep all seven live products even though the prototype rail omitted Lava Leap. Featured screenshots stay `object-fit: contain` (no cover crop).
 - Domain configuration is intentionally deferred until the user provides the final domain.
 - Phase 2 extends the selected Option 1 visual system into a multi-page client-acquisition flow while preserving the homepage as the visual source of truth.
 - Phase 3 completes the portfolio with dedicated StormRadar, WIYW, and DeedScout case studies and product-specific dashboard states.
