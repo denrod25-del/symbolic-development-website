@@ -1,3 +1,33 @@
+# SDDS Product 09 — Atlases QA
+
+## Source and implementation evidence
+
+- Live product source: `audits/atlases-2026-08-11/source-desktop.png` and `source-mobile.png` from `https://atlases.vercel.app/`.
+- SDDS implementation: `implementation-desktop.png` and `implementation-mobile.png` at 1440 × 1000 and 390 × 844.
+- Same-input comparison: `audits/atlases-2026-08-11/comparison-desktop.png`.
+
+## Findings and resolution
+
+- P0: none.
+- P1: none.
+- P2: none open.
+- The authentic monochrome-and-green Atlases interface remains fully visible in its screenshot while the surrounding case-study anatomy stays consistent with SDDS.
+- Claims are limited to public product evidence: 24 atlases, 192+ chapters, browser sandboxes, local progress, no required signup, and visible learning paths.
+
+## Responsive and functional verification
+
+- Desktop route renders the correct title, proof metrics, live destination, screenshot, narrative, system layers, outcomes, and next-project path.
+- Mobile at 390 × 844 preserves readable hierarchy, usable navigation, and zero page-level horizontal overflow.
+- Both responsive screenshot assets load without cropping or distortion.
+- Static route metadata is generated for `/work/atlases`.
+- Final severity count: P0 0, P1 0, P2 0.
+
+## Final result
+
+passed
+
+---
+
 # SDDS Product 08 — FL Plumbing Tools QA
 
 ## Source and implementation evidence

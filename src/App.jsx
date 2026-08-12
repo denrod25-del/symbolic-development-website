@@ -17,6 +17,7 @@ const products = [
   { name:"Lava Leap", category:"Game engineering", description:"A free browser-and-Android arcade climber with layered movement and live competition.", problem:"Deliver a complete, replayable arcade loop with immediate access and no required account.", metric:"10", label:"Gameplay systems", status:"Live product", beta:false, facts:[["10","Gameplay systems"],["4","Playable climbers"],["No account","Required"]], scope:["Game systems","Web distribution","Android"], href:"/work/lava-leap", liveHref:"https://lava-leap-landing.vercel.app", screenshot:"/assets/products/lava-leap-1200.webp", screenshotSmall:"/assets/products/lava-leap-720.webp" },
   { name:"ScamWatch", category:"Consumer protection", description:"Calibrated scam intelligence for suspicious links, messages, phone numbers, and email.", problem:"Give consumers a trustworthy decision point before urgency turns suspicion into harm.", metric:"4", label:"Indicator types", status:"Public beta", beta:true, facts:[["4","Indicator types"],["FL","Active alerts"],["Official","Reporting routes"]], scope:["Threat UX","Public benefit","Privacy design"], href:"/work/scamwatch", liveHref:"https://scamwatch-seven.vercel.app", screenshot:"/assets/products/scamwatch-1200.webp", screenshotSmall:"/assets/products/scamwatch-720.webp" },
   { name:"FL Plumbing Tools", category:"Homeowner planning", description:"Florida-focused plumbing cost calculators, permit guides, and project-planning tools available free without signup.", problem:"Turn fragmented pricing, permit, and repair information into a clear planning path before a homeowner calls a professional.", metric:"249", label:"Free tools and guides", status:"Live product", beta:false, facts:[["249","Tools and guides"],["Florida","Focused"],["No signup","Required"]], scope:["Calculator platform","Content system","Lead matching"], href:"/work/fl-plumbing-tools", liveHref:"https://flplumbingtools.com/", screenshot:"/assets/products/fl-plumbing-tools-1200.webp", screenshotSmall:"/assets/products/fl-plumbing-tools-720.webp" },
+  { name:"Atlases", category:"Interactive learning", description:"Chapter-based software-engineering guides with browser sandboxes that let learners practice while they learn.", problem:"Replace passive tutorials and setup friction with a structured path from explanation to working code in the browser.", metric:"24", label:"Interactive atlases", status:"Live product", beta:false, facts:[["24","Interactive atlases"],["192+","Chapters"],["No signup","Required"]], scope:["Learning platform","Browser sandboxes","Curriculum UX"], href:"/work/atlases", liveHref:"https://atlases.vercel.app/", screenshot:"/assets/products/atlases-1200.webp", screenshotSmall:"/assets/products/atlases-720.webp" },
 ];
 
 const serviceCatalog = [
@@ -362,14 +363,14 @@ function Hero() {
           <ButtonLink href="/booking" primary onClick={()=>trackEvent("booking_cta_clicked",{source:"hero"})}>Book a working session</ButtonLink>
           <SiteLink className="hero-text-link" href="/work" onClick={()=>trackEvent("proof_cta_clicked",{source:"hero"})}>See the proof <ArrowRight size={16}/></SiteLink>
         </div>
-        <p className="hero-signal"><span className="live-dot" aria-hidden="true" /> 08 live products · Web · Mobile · Desktop</p>
+        <p className="hero-signal"><span className="live-dot" aria-hidden="true" /> 09 live products · Web · Mobile · Desktop</p>
       </Reveal>
     </div>
   </section>;
 }
 
 function TrustStrip() {
-  const proof=[["08","Live products"],["249","Free tools — FL Plumbing Tools"],["35","Automated tests — ClawMonitor"],["67","Florida counties — DeedScout"]];
+  const proof=[["09","Live products"],["192+","Chapters — Atlases"],["249","Free tools — FL Plumbing Tools"],["67","Florida counties — DeedScout"]];
   return <section className="trust-strip" aria-label="Company metrics">
     <div className="trust-strip-inner">
       {proof.map(([value,label],index)=>(
@@ -615,7 +616,7 @@ function ProductProof() {
       <SectionLabel>PROOF OVER PROMISES</SectionLabel>
       <h2>Working software is the credential.</h2>
       <p>Until client references are published, the strongest evidence is inspectable: live products, public source, visible product states, and grounded release facts.</p>
-      <SiteLink className="text-link" href="/work">Explore all eight products <ArrowRight size={18}/></SiteLink>
+      <SiteLink className="text-link" href="/work">Explore all nine products <ArrowRight size={18}/></SiteLink>
     </Reveal>
     <div className="product-proof-list">
       {items.map(([name,body],index)=>(
@@ -650,7 +651,7 @@ function PageHero({eyebrow,title,copy,meta}) { return <section className="page-h
 
 function ProjectCard({product,index}) { const slug=product.href.split("/").filter(Boolean).pop(); return <article className="project-card reveal-section" id={slug}><div className="project-index">{String(index+1).padStart(2,"0")}</div><SiteLink className="project-card-visual" href={product.href} aria-label={`Read the ${product.name} case study`}><img src={product.screenshot} srcSet={`${product.screenshotSmall} 720w, ${product.screenshot} 1200w`} sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1040px) 40vw, 520px" alt={`${product.name} live product interface`} width="1200" height="750" loading="lazy" decoding="async"/></SiteLink><div className="project-card-copy"><span>{product.category}</span><h2>{product.name}</h2><p className="project-problem">{product.problem}</p><p>{product.description}</p><div className="project-scope">{product.scope.map(item=><span key={item}>{item}</span>)}</div><div className="project-proof"><strong>{product.metric}</strong><span>{product.label}</span></div><div className="project-card-links"><SiteLink href={product.href}>Read case study <ArrowRight size={18}/></SiteLink><LiveProductLink product={product} className="project-live-link"/><SiteLink href={`/booking?ref=${slug}`}>Discuss a system like {product.name} <CalendarBlank size={17}/></SiteLink></div></div></article>; }
 
-function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—08"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
+function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—09"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
 
 function AuditScoutCaseStudy() {
   const stack=["React","TypeScript","Node.js","PostgreSQL","Supabase","Vercel"];
@@ -827,6 +828,27 @@ const caseStudyDetails = {
     proofNote:"Published estimates are informational planning ranges—not bids, quotes, guarantees, or professional advice. The live product documents its methodology and licensed-plumber vetting process.",
     stack:["Interactive calculators","Florida cost research","Permit guidance","Searchable library","Licensed-plumber matching"],
   },
+  atlases: {
+    name:"Atlases", eyebrow:"INTERACTIVE ENGINEERING EDUCATION",
+    description:"A chapter-based software-engineering learning platform where explanations, exercises, and real browser sandboxes live in one continuous experience.",
+    status:"Live product", platform:"Web application", engagement:"Independent product build", deliverables:"Learning platform · sandbox UX · curriculum system",
+    heroStats:[["Interactive atlases","24"],["Published chapters","192+"],["Signup required","No"]],
+    narrative:[
+      ["OVERVIEW","Practice is part of every explanation.","Atlases teaches databases, Linux, networking, Docker, AI engineering, Python, C++, cryptography, and related disciplines through structured guides that run code directly in the browser."],
+      ["THE PROBLEM","Passive learning hides the gap between recognition and capability.","Videos and static documentation can make concepts feel familiar without requiring a learner to recall commands, reason through errors, or produce working results. Local toolchain setup adds another barrier before practice begins."],
+      ["THE SOLUTION","A zero-install path from concept to working output.","Each atlas combines explicit chapter objectives, live exercises, immediate feedback, and browser-based engines. Curated backend, AI, DevOps, and computer-science paths provide direction while every atlas remains independently accessible."],
+    ],
+    architecture:[
+      [FileText,"Curriculum layer","Twenty-four atlases organize more than 192 chapters around explicit engineering skills and learning objectives."],
+      [Code,"Sandbox layer","SQL, Python, and other exercises run in browser engines so learners practice without installing a toolchain."],
+      [TrendUp,"Progress layer","Local progress tracking preserves momentum without requiring an account."],
+      [Strategy,"Path layer","Curated learning paths connect standalone atlases into backend, AI, DevOps, and computer-science journeys."],
+    ],
+    outcomeTitle:"A software-engineering curriculum where every concept can become a working result immediately.",
+    outcomes:[["24","Interactive atlases"],["192+","Published chapters"],["0","Required signup steps"]],
+    proofNote:"The live platform exposes its atlas count, chapter count, sample SQL lesson, browser-based sandbox model, local progress behavior, and no-signup access directly on the public homepage.",
+    stack:["Browser sandboxes","SQLite","Pyodide","Interactive curriculum","Local progress","Vercel"],
+  },
 };
 
 function ProductCaseStudy({ slug }) {
@@ -913,6 +935,7 @@ export function App() {
   if(location.pathname==="/work/lava-leap") page=<ProductCaseStudy slug="lava-leap"/>;
   if(location.pathname==="/work/scamwatch") page=<ProductCaseStudy slug="scamwatch"/>;
   if(location.pathname==="/work/fl-plumbing-tools") page=<ProductCaseStudy slug="fl-plumbing-tools"/>;
+  if(location.pathname==="/work/atlases") page=<ProductCaseStudy slug="atlases"/>;
   if(location.pathname==="/services") page=<ServicesPage/>;
   if(location.pathname==="/insights") page=<InsightsPage/>;
   if(location.pathname.startsWith("/insights/")) page=<InsightArticle slug={location.pathname.split("/").filter(Boolean)[1]}/>;
