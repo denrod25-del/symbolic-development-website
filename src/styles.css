@@ -371,7 +371,14 @@ footer { width: min(calc(100% - 80px), 1280px); min-height: 120px; margin: 0 aut
 .page-hero p, .case-hero > div:first-child > p { max-width: 610px; margin: 0; color: var(--titanium); font-size: 19px; line-height: 1.65; }
 .page-hero-meta { position: absolute; z-index: 1; left: max(6vw,40px); right: max(6vw,40px); bottom: 0; height: 76px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); color: var(--titanium); font: 12px/1 "JetBrains Mono",monospace; letter-spacing: .08em; }
 
-.project-list { padding-top: 38px; }
+.work-index { padding-top: 24px; }
+.work-filter { display: flex; gap: 30px; overflow-x: auto; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+.work-filter::-webkit-scrollbar { display: none; }
+.work-filter button { flex: 0 0 auto; position: relative; min-height: 68px; padding: 0; border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--titanium); font: 12px/1 "JetBrains Mono",monospace; letter-spacing: .05em; cursor: pointer; transition: color .15s ease-out,border-color .15s ease-out; }
+.work-filter button:hover,.work-filter button.active { color: var(--chrome); border-bottom-color: var(--blue); }
+.work-filter button:focus-visible { outline: 2px solid var(--blue); outline-offset: -4px; }
+.work-results { min-height: 92px; display: flex; align-items: center; justify-content: space-between; color: var(--titanium); font: 12px/1 "JetBrains Mono",monospace; letter-spacing: .08em; }
+.project-list { padding-top: 0; }
 .work-proof-note { padding-block: 48px; display: grid; grid-template-columns: .35fr .65fr; gap: 80px; border-bottom: 1px solid var(--border); }
 .work-proof-note span { color: var(--blue); font: 12px/1 "JetBrains Mono",monospace; letter-spacing: .08em; }
 .work-proof-note p { max-width: 760px; margin: 0; color: var(--titanium); line-height: 1.7; }
@@ -612,7 +619,7 @@ footer { width: min(calc(100% - 80px), 1280px); min-height: 120px; margin: 0 aut
   .contact form { padding: 24px; }.form-row { grid-template-columns: 1fr; }
   footer { width: calc(100% - 48px); grid-template-columns: 1fr; padding: 30px 0; text-align: left; }footer nav { flex-wrap: wrap; }footer span { justify-self: start; }
   .page-hero { min-height: 660px; padding: 150px 24px 78px; }.page-hero h1,.case-hero h1 { margin-top: 38px; font-size: clamp(52px,14vw,72px); }.page-hero p,.case-hero > div:first-child > p { font-size: 16px; }.page-hero-meta { left: 24px; right: 24px; }.page-hero-meta span:last-child { display: none; }
-  .work-proof-note { grid-template-columns: 1fr; gap: 20px; padding-block: 38px; }.project-list { padding-top: 24px; }.project-card { min-height: 0; padding: 48px 0; grid-template-columns: 1fr; gap: 28px; }.project-index { order: 0; }.project-card-visual { order: 1; }.project-card-copy { order: 2; }.project-card h2 { font-size: 48px; }.project-card-copy a { margin-top: 28px; }
+  .work-proof-note { grid-template-columns: 1fr; gap: 20px; padding-block: 38px; }.work-index { padding-top: 20px; }.work-filter { gap: 24px; }.work-filter button { min-height: 58px; }.work-results { min-height: 76px; }.project-card { min-height: 0; padding: 48px 0; grid-template-columns: 1fr; gap: 28px; }.project-index { order: 0; }.project-card-visual { order: 1; }.project-card-copy { order: 2; }.project-card h2 { font-size: 48px; }.project-card-copy a { margin-top: 28px; }
   .case-hero { padding: 140px 24px 80px; }.back-link { margin-bottom: 54px; }.case-facts { grid-template-columns: 1fr; }.case-hero-stats { grid-template-columns: 1fr; }.case-hero-stats > div { min-height: 88px; display: flex; padding: 0; }.case-dashboard .audit-window { min-height: 500px; grid-template-columns: 54px 1fr; }.case-dashboard .audit-main { padding: 10px; }
   .case-narrative { grid-template-columns: 1fr; }.case-narrative > div { min-height: 0; padding: 50px 0; }.case-narrative > div:nth-child(even) { padding-top: 0; border-top: 0; }.case-rail > span { margin-bottom: 26px; }.case-narrative p { font-size: 16px; }
   .case-narrative > .case-study-row { grid-template-columns: 1fr; min-height: 0; padding: 0; column-gap: 0; }.case-study-row > div { padding: 50px 0; }.case-study-row > div:last-child { padding-top: 0; }

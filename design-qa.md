@@ -1,3 +1,48 @@
+# SDDS Portfolio Organization QA — August 2026
+
+## Source and implementation evidence
+
+- Existing visual source of truth: `audits/portfolio-organization-2026-08-12/source-work-desktop.png` and `source-work-mobile.png` captured from the published `/work` route before implementation.
+- Browser-rendered implementation: `implementation-work-desktop.png`, `implementation-work-filtered-desktop.png`, `implementation-work-mobile.png`, and `implementation-home-featured-desktop.png`.
+- Full-view comparison: `audits/portfolio-organization-2026-08-12/comparison-work-desktop.png`.
+- Viewports: desktop browser capture at 1280 × 720 CSS px and mobile at 390 × 844 CSS px, 1× density.
+- States: unfiltered Work index, Developer products filter, Interactive experiences filter, and homepage featured-product rail.
+
+## Findings and comparison history
+
+1. The source route presented all ten projects in one uninterrupted list and the homepage presented all ten in one product rail. This preserved completeness but weakened scan speed as the portfolio grew.
+2. The implementation adds a restrained SDDS-native filter rail and live result count without changing the approved hero, project-card anatomy, typography, colors, screenshots, spacing system, or conversion actions.
+3. The homepage rail now contains six deliberately selected proof systems; `/work` remains the complete ten-project source of truth.
+4. Post-implementation comparison found no actionable P0, P1, or P2 visual or functional regressions.
+
+## Required fidelity surfaces
+
+- Fonts and typography: existing Space Grotesk, Inter, and JetBrains Mono roles are unchanged. Filter labels use the established technical-label treatment and preserve readable wrapping.
+- Spacing and layout rhythm: the filter and result rails reuse the Insights index proportions, rules, and vertical cadence. Project cards retain their prior grid and spacing.
+- Colors and tokens: filters use existing Obsidian, Titanium, Chrome, Electric Blue, and metallic-border tokens with no new palette.
+- Image quality: all real product screenshots remain contained, proportionally scaled, and uncropped.
+- Copy and content: categories map to buyer interests and do not alter product claims. All ten products remain available under All.
+
+## Interaction, responsiveness, and accessibility verification
+
+- All filter controls expose `aria-pressed`, visible focus, and semantic toolbar labeling.
+- Developer products resolves to ClawMonitor, Atlases, and iSymbolic; Interactive experiences resolves to Lava Leap and Atlases.
+- The result count and active category update in an `aria-live` region.
+- Mobile filters scroll horizontally inside their own rail without page-level horizontal overflow.
+- Homepage arrow-key tab behavior remains intact with six featured systems.
+- Browser console check found no application errors or warnings; only expected development analytics and React development messages were present.
+- Final severity count: P0 0, P1 0, P2 0.
+
+## Focused comparison
+
+The focused filtered-state capture makes the new controls, active state, live count, and first resulting project readable at native size; no further crop was required.
+
+## Final result
+
+passed
+
+---
+
 # SDDS Product 10 — iSymbolic QA
 
 ## Source and implementation evidence

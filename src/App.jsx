@@ -21,6 +21,22 @@ const products = [
   { name:"iSymbolic", category:"Technical publishing", description:"A technical blog and project archive documenting shipped games, tools, AI stacks, automation, 3D work, and the lessons behind them.", problem:"Turn a growing body of experiments and shipped builds into a searchable, durable record that other builders can learn from.", metric:"33", label:"Projects documented", status:"Live publication", beta:false, facts:[["33","Projects"],["RSS","Syndication"],["Tags","Topic discovery"]], scope:["Editorial platform","Project archive","Content system"], href:"/work/isymbolic", liveHref:"https://isymbolic-blog.vercel.app/", screenshot:"/assets/products/isymbolic-blog-1200.webp", screenshotSmall:"/assets/products/isymbolic-blog-720.webp" },
 ];
 
+const featuredProductNames=["AuditScout","StormRadar","DeedScout","FL Plumbing Tools","Atlases","iSymbolic"];
+const featuredProducts=featuredProductNames.map(name=>products.find(product=>product.name===name));
+const workFilters=["All","Business systems","Public intelligence","Developer products","Interactive experiences"];
+const productFilterMap={
+  AuditScout:["Business systems","Public intelligence"],
+  StormRadar:["Business systems","Public intelligence"],
+  WIYW:["Public intelligence"],
+  DeedScout:["Business systems","Public intelligence"],
+  ClawMonitor:["Developer products"],
+  "Lava Leap":["Interactive experiences"],
+  ScamWatch:["Public intelligence"],
+  "FL Plumbing Tools":["Business systems","Public intelligence"],
+  Atlases:["Developer products","Interactive experiences"],
+  iSymbolic:["Developer products"],
+};
+
 const serviceCatalog = [
   { icon:Code, title:"Custom Software", body:"Purpose-built systems designed around your operations, users, and competitive advantage." },
   { icon:Robot, title:"AI Development", body:"Practical AI products and intelligent workflows grounded in reliable data and measurable value." },
@@ -475,7 +491,7 @@ function SystemDashboard({ productName }) {
 }
 
 function ProductSection() {
-  const [product,setProduct]=useState(products[0]);
+  const [product,setProduct]=useState(featuredProducts[0]);
   const [swapping,setSwapping]=useState(false);
   const railRefs=useRef([]);
   const reduced=usePrefersReducedMotion();
@@ -492,25 +508,25 @@ function ProductSection() {
     },220);
   };
   useEffect(()=>()=>window.clearTimeout(swapTimer.current),[]);
-  const activateByIndex=index=>selectProduct(products[index],index);
+  const activateByIndex=index=>selectProduct(featuredProducts[index],index);
   const handleRailKey=(event,index)=>{
-    const keys={ArrowDown:(index+1)%products.length,ArrowUp:(index-1+products.length)%products.length,Home:0,End:products.length-1,ArrowRight:(index+1)%products.length,ArrowLeft:(index-1+products.length)%products.length};
+    const keys={ArrowDown:(index+1)%featuredProducts.length,ArrowUp:(index-1+featuredProducts.length)%featuredProducts.length,Home:0,End:featuredProducts.length-1,ArrowRight:(index+1)%featuredProducts.length,ArrowLeft:(index-1+featuredProducts.length)%featuredProducts.length};
     if(keys[event.key]===undefined) return;
     event.preventDefault();
     activateByIndex(keys[event.key]);
   };
-  const selectedIndex=products.findIndex(item=>item.name===product.name);
+  const selectedIndex=featuredProducts.findIndex(item=>item.name===product.name);
   return <section className="product-section section" id="work">
     <div className="section-heading product-section-intro">
       <Reveal>
         <SectionLabel>Live product proof</SectionLabel>
         <h2>Working products.<br/>Visible decisions.</h2>
       </Reveal>
-      <Reveal delay={120}><p>Seven working products across public information, operational intelligence, developer tooling, and game engineering.</p></Reveal>
+      <Reveal delay={120}><p>Six featured systems selected from ten live products across operational software, public intelligence, developer tooling, education, and technical publishing.</p></Reveal>
     </div>
     <Reveal className="proof-shell">
       <div className="product-rail" role="tablist" aria-label="Featured products" aria-orientation="vertical">
-        {products.map((item,index)=>(
+        {featuredProducts.map((item,index)=>(
           <button
             type="button"
             id={`product-tab-${index}`}
@@ -652,7 +668,18 @@ function PageHero({eyebrow,title,copy,meta}) { return <section className="page-h
 
 function ProjectCard({product,index}) { const slug=product.href.split("/").filter(Boolean).pop(); return <article className="project-card reveal-section" id={slug}><div className="project-index">{String(index+1).padStart(2,"0")}</div><SiteLink className="project-card-visual" href={product.href} aria-label={`Read the ${product.name} case study`}><img src={product.screenshot} srcSet={`${product.screenshotSmall} 720w, ${product.screenshot} 1200w`} sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1040px) 40vw, 520px" alt={`${product.name} live product interface`} width="1200" height="750" loading="lazy" decoding="async"/></SiteLink><div className="project-card-copy"><span>{product.category}</span><h2>{product.name}</h2><p className="project-problem">{product.problem}</p><p>{product.description}</p><div className="project-scope">{product.scope.map(item=><span key={item}>{item}</span>)}</div><div className="project-proof"><strong>{product.metric}</strong><span>{product.label}</span></div><div className="project-card-links"><SiteLink href={product.href}>Read case study <ArrowRight size={18}/></SiteLink><LiveProductLink product={product} className="project-live-link"/><SiteLink href={`/booking?ref=${slug}`}>Discuss a system like {product.name} <CalendarBlank size={17}/></SiteLink></div></div></article>; }
 
-function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—10"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
+function WorkPage() {
+  const [filter,setFilter]=useState("All");
+  const visible=filter==="All" ? products : products.filter(product=>productFilterMap[product.name]?.includes(filter));
+  return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—10"/>
+    <section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section>
+    <section className="work-index section">
+      <div className="work-filter" role="toolbar" aria-label="Filter work by product type">{workFilters.map(item=><button type="button" key={item} aria-pressed={filter===item} className={filter===item?"active":""} onClick={()=>setFilter(item)}>{item}</button>)}</div>
+      <div className="work-results" aria-live="polite"><span>{String(visible.length).padStart(2,"0")} SYSTEMS</span><span>{filter.toUpperCase()}</span></div>
+      <div className="project-list">{visible.map(product=><ProjectCard key={product.name} product={product} index={products.indexOf(product)}/>)}</div>
+    </section><EngagementModels/><PhaseCTA/>
+  </main>;
+}
 
 function AuditScoutCaseStudy() {
   const stack=["React","TypeScript","Node.js","PostgreSQL","Supabase","Vercel"];
