@@ -18,6 +18,7 @@ const products = [
   { name:"ScamWatch", category:"Consumer protection", description:"Calibrated scam intelligence for suspicious links, messages, phone numbers, and email.", problem:"Give consumers a trustworthy decision point before urgency turns suspicion into harm.", metric:"4", label:"Indicator types", status:"Public beta", beta:true, facts:[["4","Indicator types"],["FL","Active alerts"],["Official","Reporting routes"]], scope:["Threat UX","Public benefit","Privacy design"], href:"/work/scamwatch", liveHref:"https://scamwatch-seven.vercel.app", screenshot:"/assets/products/scamwatch-1200.webp", screenshotSmall:"/assets/products/scamwatch-720.webp" },
   { name:"FL Plumbing Tools", category:"Homeowner planning", description:"Florida-focused plumbing cost calculators, permit guides, and project-planning tools available free without signup.", problem:"Turn fragmented pricing, permit, and repair information into a clear planning path before a homeowner calls a professional.", metric:"249", label:"Free tools and guides", status:"Live product", beta:false, facts:[["249","Tools and guides"],["Florida","Focused"],["No signup","Required"]], scope:["Calculator platform","Content system","Lead matching"], href:"/work/fl-plumbing-tools", liveHref:"https://flplumbingtools.com/", screenshot:"/assets/products/fl-plumbing-tools-1200.webp", screenshotSmall:"/assets/products/fl-plumbing-tools-720.webp" },
   { name:"Atlases", category:"Interactive learning", description:"Chapter-based software-engineering guides with browser sandboxes that let learners practice while they learn.", problem:"Replace passive tutorials and setup friction with a structured path from explanation to working code in the browser.", metric:"24", label:"Interactive atlases", status:"Live product", beta:false, facts:[["24","Interactive atlases"],["192+","Chapters"],["No signup","Required"]], scope:["Learning platform","Browser sandboxes","Curriculum UX"], href:"/work/atlases", liveHref:"https://atlases.vercel.app/", screenshot:"/assets/products/atlases-1200.webp", screenshotSmall:"/assets/products/atlases-720.webp" },
+  { name:"iSymbolic", category:"Technical publishing", description:"A technical blog and project archive documenting shipped games, tools, AI stacks, automation, 3D work, and the lessons behind them.", problem:"Turn a growing body of experiments and shipped builds into a searchable, durable record that other builders can learn from.", metric:"33", label:"Projects documented", status:"Live publication", beta:false, facts:[["33","Projects"],["RSS","Syndication"],["Tags","Topic discovery"]], scope:["Editorial platform","Project archive","Content system"], href:"/work/isymbolic", liveHref:"https://isymbolic-blog.vercel.app/", screenshot:"/assets/products/isymbolic-blog-1200.webp", screenshotSmall:"/assets/products/isymbolic-blog-720.webp" },
 ];
 
 const serviceCatalog = [
@@ -363,14 +364,14 @@ function Hero() {
           <ButtonLink href="/booking" primary onClick={()=>trackEvent("booking_cta_clicked",{source:"hero"})}>Book a working session</ButtonLink>
           <SiteLink className="hero-text-link" href="/work" onClick={()=>trackEvent("proof_cta_clicked",{source:"hero"})}>See the proof <ArrowRight size={16}/></SiteLink>
         </div>
-        <p className="hero-signal"><span className="live-dot" aria-hidden="true" /> 09 live products · Web · Mobile · Desktop</p>
+        <p className="hero-signal"><span className="live-dot" aria-hidden="true" /> 10 live products · Web · Mobile · Desktop</p>
       </Reveal>
     </div>
   </section>;
 }
 
 function TrustStrip() {
-  const proof=[["09","Live products"],["192+","Chapters — Atlases"],["249","Free tools — FL Plumbing Tools"],["67","Florida counties — DeedScout"]];
+  const proof=[["10","Live products"],["33","Projects — iSymbolic"],["192+","Chapters — Atlases"],["249","Free tools — FL Plumbing Tools"]];
   return <section className="trust-strip" aria-label="Company metrics">
     <div className="trust-strip-inner">
       {proof.map(([value,label],index)=>(
@@ -616,7 +617,7 @@ function ProductProof() {
       <SectionLabel>PROOF OVER PROMISES</SectionLabel>
       <h2>Working software is the credential.</h2>
       <p>Until client references are published, the strongest evidence is inspectable: live products, public source, visible product states, and grounded release facts.</p>
-      <SiteLink className="text-link" href="/work">Explore all nine products <ArrowRight size={18}/></SiteLink>
+      <SiteLink className="text-link" href="/work">Explore all ten products <ArrowRight size={18}/></SiteLink>
     </Reveal>
     <div className="product-proof-list">
       {items.map(([name,body],index)=>(
@@ -651,7 +652,7 @@ function PageHero({eyebrow,title,copy,meta}) { return <section className="page-h
 
 function ProjectCard({product,index}) { const slug=product.href.split("/").filter(Boolean).pop(); return <article className="project-card reveal-section" id={slug}><div className="project-index">{String(index+1).padStart(2,"0")}</div><SiteLink className="project-card-visual" href={product.href} aria-label={`Read the ${product.name} case study`}><img src={product.screenshot} srcSet={`${product.screenshotSmall} 720w, ${product.screenshot} 1200w`} sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1040px) 40vw, 520px" alt={`${product.name} live product interface`} width="1200" height="750" loading="lazy" decoding="async"/></SiteLink><div className="project-card-copy"><span>{product.category}</span><h2>{product.name}</h2><p className="project-problem">{product.problem}</p><p>{product.description}</p><div className="project-scope">{product.scope.map(item=><span key={item}>{item}</span>)}</div><div className="project-proof"><strong>{product.metric}</strong><span>{product.label}</span></div><div className="project-card-links"><SiteLink href={product.href}>Read case study <ArrowRight size={18}/></SiteLink><LiveProductLink product={product} className="project-live-link"/><SiteLink href={`/booking?ref=${slug}`}>Discuss a system like {product.name} <CalendarBlank size={17}/></SiteLink></div></div></article>; }
 
-function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—09"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
+function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—10"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
 
 function AuditScoutCaseStudy() {
   const stack=["React","TypeScript","Node.js","PostgreSQL","Supabase","Vercel"];
@@ -849,6 +850,27 @@ const caseStudyDetails = {
     proofNote:"The live platform exposes its atlas count, chapter count, sample SQL lesson, browser-based sandbox model, local progress behavior, and no-signup access directly on the public homepage.",
     stack:["Browser sandboxes","SQLite","Pyodide","Interactive curriculum","Local progress","Vercel"],
   },
+  isymbolic: {
+    name:"iSymbolic", eyebrow:"TECHNICAL PUBLISHING",
+    description:"A technical publication and project archive documenting games, 3D art, desktop tools, local AI systems, automation, and the practical gotchas behind shipping them.",
+    status:"Live publication", platform:"Web publication", engagement:"Independent product build", deliverables:"Editorial platform · project archive · RSS",
+    heroStats:[["Projects listed","33"],["Latest posts","6"],["Syndication","RSS"]],
+    narrative:[
+      ["OVERVIEW","A durable record of making software work.","iSymbolic connects finished projects with the engineering stories behind them: what was built, which tools were used, where the process failed, and what ultimately made the release possible."],
+      ["THE PROBLEM","Project knowledge disappears when only the finished artifact survives.","A growing collection of games, desktop utilities, local AI systems, automation pipelines, water-data tools, and 3D builds needed more than a link directory. The useful material was in the decisions, setup failures, and recovery paths behind each result."],
+      ["THE SOLUTION","An editorial system organized around projects and lessons.","The publication combines dated articles, topic tags, a thirty-three-project archive, About context, and RSS distribution. Concise summaries make the library scannable while full stories preserve the implementation detail other builders can reuse."],
+    ],
+    architecture:[
+      [FileText,"Editorial layer","Dated technical articles preserve build decisions, failures, fixes, and practical outcomes."],
+      [Stack,"Project layer","A thirty-three-project index connects published stories, public source, live releases, and upcoming write-ups."],
+      [SlidersHorizontal,"Discovery layer","Topic tags organize AI, automation, Windows, water, OSINT, games, and other recurring themes."],
+      [Globe,"Distribution layer","RSS and stable article routes make the publication available beyond the homepage feed."],
+    ],
+    outcomeTitle:"A growing engineering archive where shipped work becomes reusable knowledge.",
+    outcomes:[["33","Projects and counting"],["6","Latest posts surfaced"],["1","Public RSS feed"]],
+    proofNote:"The public site states thirty-three projects and counting, exposes six latest posts on the homepage, and provides working Blog, Projects, About, tag, article, and RSS destinations.",
+    stack:["Technical writing","Project archive","Topic tags","RSS","Vercel"],
+  },
 };
 
 function ProductCaseStudy({ slug }) {
@@ -936,6 +958,7 @@ export function App() {
   if(location.pathname==="/work/scamwatch") page=<ProductCaseStudy slug="scamwatch"/>;
   if(location.pathname==="/work/fl-plumbing-tools") page=<ProductCaseStudy slug="fl-plumbing-tools"/>;
   if(location.pathname==="/work/atlases") page=<ProductCaseStudy slug="atlases"/>;
+  if(location.pathname==="/work/isymbolic") page=<ProductCaseStudy slug="isymbolic"/>;
   if(location.pathname==="/services") page=<ServicesPage/>;
   if(location.pathname==="/insights") page=<InsightsPage/>;
   if(location.pathname.startsWith("/insights/")) page=<InsightArticle slug={location.pathname.split("/").filter(Boolean)[1]}/>;

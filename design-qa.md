@@ -1,3 +1,33 @@
+# SDDS Product 10 — iSymbolic QA
+
+## Source and implementation evidence
+
+- Live source: `audits/isymbolic-blog-2026-08-11/source-desktop.png` and `source-mobile.png` from `https://isymbolic-blog.vercel.app/`.
+- SDDS implementation: `implementation-desktop.png` and `implementation-mobile.png` at 1440 × 1000 and 390 × 844.
+- Same-input comparison: `audits/isymbolic-blog-2026-08-11/comparison-desktop.png`.
+
+## Findings and resolution
+
+- P0: none.
+- P1: none.
+- P2: none open.
+- The live publication's warm editorial interface is shown authentically in its contained screenshot; its case-study shell retains the established SDDS hierarchy.
+- Proof is grounded in visible public content: 33 projects, six homepage posts, dated articles, topic tags, Projects and About pages, and RSS. No readership or engagement metrics were invented.
+
+## Responsive and functional verification
+
+- Desktop route renders title, proof metrics, live destination, screenshot, narrative, system layers, outcomes, and the cyclic next-project path.
+- Mobile at 390 × 844 preserves readable hierarchy, contained media, usable navigation, and no page-level horizontal overflow.
+- Responsive screenshot assets load without cropping or distortion.
+- Static metadata is generated for `/work/isymbolic`.
+- Final severity count: P0 0, P1 0, P2 0.
+
+## Final result
+
+passed
+
+---
+
 # SDDS Product 09 — Atlases QA
 
 ## Source and implementation evidence
