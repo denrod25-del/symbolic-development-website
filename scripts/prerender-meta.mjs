@@ -10,7 +10,7 @@ const base = "https://symbolicdev.com";
 
 const routes = {
   "/": ["Symbolic Development — Software Built to Endure", "Elegant, reliable software and infrastructure engineered with purpose.", "/assets/og/home.webp"],
-  "/work": ["Selected Work — Symbolic Development", "Seven live products with inspectable decisions, grounded proof, and public release evidence.", "/assets/og/auditscout.webp"],
+  "/work": ["Selected Work — Symbolic Development", "Eight live products with inspectable decisions, grounded proof, and public release evidence.", "/assets/og/auditscout.webp"],
   "/work/auditscout": ["AuditScout Case Study — Symbolic Development", "A public website-audit experience that turns a URL into a prioritized scorecard and practical next actions.", "/assets/og/auditscout.webp"],
   "/work/stormradar": ["StormRadar Case Study — Symbolic Development", "Job-site weather intelligence that helps contractors understand when conditions are workable.", "/assets/og/stormradar.webp"],
   "/work/wiyw": ["WIYW Case Study — Symbolic Development", "Plain-language Florida drinking-water reports searchable by city, ZIP code, or utility.", "/assets/og/wiyw.webp"],
@@ -18,6 +18,7 @@ const routes = {
   "/work/clawmonitor": ["ClawMonitor Case Study — Symbolic Development", "A slim Windows monitor for system performance and local developer-service health.", "/assets/og/clawmonitor.webp"],
   "/work/lava-leap": ["Lava Leap Case Study — Symbolic Development", "A free browser-and-Android arcade climber with layered movement and live competition.", "/assets/og/lava-leap.webp"],
   "/work/scamwatch": ["ScamWatch Case Study — Symbolic Development", "Calibrated scam intelligence for suspicious links, messages, phone numbers, and email.", "/assets/og/scamwatch.webp"],
+  "/work/fl-plumbing-tools": ["FL Plumbing Tools Case Study — Symbolic Development", "Florida-focused plumbing calculators, permit guides, and homeowner planning tools.", "/assets/products/fl-plumbing-tools-1200.webp"],
   "/services": ["Engineering Services — Symbolic Development", "Custom software, AI, automation, mobile, cloud, integrations, and technical consulting.", "/assets/og/home.webp"],
   "/insights": ["Engineering Insights — Symbolic Development", "Engineering perspectives on software, AI, automation, security, architecture, and operations.", "/assets/og/home.webp"],
   "/insights/systems-that-endure": ["What Makes a Software System Endure? — Symbolic Development", "The architectural and product decisions that keep software useful long after its first release.", "/assets/og/home.webp", "article"],

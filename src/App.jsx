@@ -16,6 +16,7 @@ const products = [
   { name:"ClawMonitor", category:"Developer tooling", description:"A slim Windows monitor for system performance and local developer-service health.", problem:"Keep machine and local-service health visible without interrupting the work being monitored.", metric:"35", label:"Automated tests", status:"Live product", beta:false, facts:[["35","Automated tests"],["MIT","License"],["Windows","Platform"]], scope:["Desktop product","Observability","Open source"], href:"/work/clawmonitor", liveHref:"https://denrod25-del.github.io/ClawMonitor/index.html", screenshot:"/assets/products/clawmonitor-1200.webp", screenshotSmall:"/assets/products/clawmonitor-720.webp" },
   { name:"Lava Leap", category:"Game engineering", description:"A free browser-and-Android arcade climber with layered movement and live competition.", problem:"Deliver a complete, replayable arcade loop with immediate access and no required account.", metric:"10", label:"Gameplay systems", status:"Live product", beta:false, facts:[["10","Gameplay systems"],["4","Playable climbers"],["No account","Required"]], scope:["Game systems","Web distribution","Android"], href:"/work/lava-leap", liveHref:"https://lava-leap-landing.vercel.app", screenshot:"/assets/products/lava-leap-1200.webp", screenshotSmall:"/assets/products/lava-leap-720.webp" },
   { name:"ScamWatch", category:"Consumer protection", description:"Calibrated scam intelligence for suspicious links, messages, phone numbers, and email.", problem:"Give consumers a trustworthy decision point before urgency turns suspicion into harm.", metric:"4", label:"Indicator types", status:"Public beta", beta:true, facts:[["4","Indicator types"],["FL","Active alerts"],["Official","Reporting routes"]], scope:["Threat UX","Public benefit","Privacy design"], href:"/work/scamwatch", liveHref:"https://scamwatch-seven.vercel.app", screenshot:"/assets/products/scamwatch-1200.webp", screenshotSmall:"/assets/products/scamwatch-720.webp" },
+  { name:"FL Plumbing Tools", category:"Homeowner planning", description:"Florida-focused plumbing cost calculators, permit guides, and project-planning tools available free without signup.", problem:"Turn fragmented pricing, permit, and repair information into a clear planning path before a homeowner calls a professional.", metric:"249", label:"Free tools and guides", status:"Live product", beta:false, facts:[["249","Tools and guides"],["Florida","Focused"],["No signup","Required"]], scope:["Calculator platform","Content system","Lead matching"], href:"/work/fl-plumbing-tools", liveHref:"https://flplumbingtools.com/", screenshot:"/assets/products/fl-plumbing-tools-1200.webp", screenshotSmall:"/assets/products/fl-plumbing-tools-720.webp" },
 ];
 
 const serviceCatalog = [
@@ -361,14 +362,14 @@ function Hero() {
           <ButtonLink href="/booking" primary onClick={()=>trackEvent("booking_cta_clicked",{source:"hero"})}>Book a working session</ButtonLink>
           <SiteLink className="hero-text-link" href="/work" onClick={()=>trackEvent("proof_cta_clicked",{source:"hero"})}>See the proof <ArrowRight size={16}/></SiteLink>
         </div>
-        <p className="hero-signal"><span className="live-dot" aria-hidden="true" /> 07 live products · Web · Mobile · Desktop</p>
+        <p className="hero-signal"><span className="live-dot" aria-hidden="true" /> 08 live products · Web · Mobile · Desktop</p>
       </Reveal>
     </div>
   </section>;
 }
 
 function TrustStrip() {
-  const proof=[["07","Live products"],["03","Platform surfaces"],["35","Automated tests — ClawMonitor"],["67","Florida counties — DeedScout"]];
+  const proof=[["08","Live products"],["249","Free tools — FL Plumbing Tools"],["35","Automated tests — ClawMonitor"],["67","Florida counties — DeedScout"]];
   return <section className="trust-strip" aria-label="Company metrics">
     <div className="trust-strip-inner">
       {proof.map(([value,label],index)=>(
@@ -614,7 +615,7 @@ function ProductProof() {
       <SectionLabel>PROOF OVER PROMISES</SectionLabel>
       <h2>Working software is the credential.</h2>
       <p>Until client references are published, the strongest evidence is inspectable: live products, public source, visible product states, and grounded release facts.</p>
-      <SiteLink className="text-link" href="/work">Explore all seven products <ArrowRight size={18}/></SiteLink>
+      <SiteLink className="text-link" href="/work">Explore all eight products <ArrowRight size={18}/></SiteLink>
     </Reveal>
     <div className="product-proof-list">
       {items.map(([name,body],index)=>(
@@ -649,7 +650,7 @@ function PageHero({eyebrow,title,copy,meta}) { return <section className="page-h
 
 function ProjectCard({product,index}) { const slug=product.href.split("/").filter(Boolean).pop(); return <article className="project-card reveal-section" id={slug}><div className="project-index">{String(index+1).padStart(2,"0")}</div><SiteLink className="project-card-visual" href={product.href} aria-label={`Read the ${product.name} case study`}><img src={product.screenshot} srcSet={`${product.screenshotSmall} 720w, ${product.screenshot} 1200w`} sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1040px) 40vw, 520px" alt={`${product.name} live product interface`} width="1200" height="750" loading="lazy" decoding="async"/></SiteLink><div className="project-card-copy"><span>{product.category}</span><h2>{product.name}</h2><p className="project-problem">{product.problem}</p><p>{product.description}</p><div className="project-scope">{product.scope.map(item=><span key={item}>{item}</span>)}</div><div className="project-proof"><strong>{product.metric}</strong><span>{product.label}</span></div><div className="project-card-links"><SiteLink href={product.href}>Read case study <ArrowRight size={18}/></SiteLink><LiveProductLink product={product} className="project-live-link"/><SiteLink href={`/booking?ref=${slug}`}>Discuss a system like {product.name} <CalendarBlank size={17}/></SiteLink></div></div></article>; }
 
-function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—07"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
+function WorkPage() { return <main><PageHero eyebrow="SELECTED SYSTEMS" title={<>Working products.<br/>Visible decisions.</>} copy="Every project shows the operating problem, the product response, and evidence a prospective client can inspect directly." meta="WORK // 01—08"/><section className="work-proof-note section"><span>HOW TO READ THE WORK</span><p>These are independent products and public releases rather than anonymous client claims. Metrics are limited to facts visible in the live product, public source, or release documentation.</p></section><section className="project-list section">{products.map((product,index)=><ProjectCard key={product.name} product={product} index={index}/>)}</section><EngagementModels/><PhaseCTA/></main>; }
 
 function AuditScoutCaseStudy() {
   const stack=["React","TypeScript","Node.js","PostgreSQL","Supabase","Vercel"];
@@ -805,6 +806,27 @@ const caseStudyDetails = {
     proofNote:"ScamWatch clearly labels its seeded campaigns as demo data and does not present them as a complete live scam database. Official reporting links remain the source of record.",
     stack:["Vercel","Threat analysis","Privacy controls","Florida alerts","Recovery guidance"],
   },
+  "fl-plumbing-tools": {
+    name:"FL Plumbing Tools", eyebrow:"HOMEOWNER PLANNING PLATFORM",
+    description:"A Florida-focused library of plumbing calculators and guides that helps homeowners estimate costs, understand permits, compare repair options, and find licensed professionals.",
+    status:"Live product", platform:"Web application", engagement:"Independent product build", deliverables:"Calculator platform · content system · lead matching",
+    heroStats:[["Free tools","249"],["Signup required","No"],["Market focus","Florida"]],
+    narrative:[
+      ["OVERVIEW","Plan before you call a pro.","FL Plumbing Tools gives Florida homeowners a single place to estimate project costs, understand common repair paths, review permit guidance, and move toward a licensed professional when they are ready."],
+      ["THE PROBLEM","Plumbing decisions begin with scattered and inconsistent information.","Homeowners often compare generic national cost articles, unfamiliar code requirements, supplier pricing, and contractor estimates without a shared planning baseline. That uncertainty makes it difficult to recognize a reasonable scope or prepare useful questions."],
+      ["THE SOLUTION","A searchable planning library grounded in Florida context.","The platform organizes 249 calculators and guides by project type, explains how estimates are produced, identifies regional pricing factors, and keeps every core tool free with no account or email required."],
+    ],
+    architecture:[
+      [SlidersHorizontal,"Calculator layer","Interactive tools translate project details such as system size, fixture count, and pipe material into planning ranges."],
+      [FileText,"Guidance layer","Permit, cost, repair, water-quality, and commercial topics are organized into one searchable library."],
+      [Globe,"Florida context","Regional pricing, permit schedules, and state-specific planning considerations shape the published guidance."],
+      [ShieldCheck,"Trust layer","Visible methodology, editorial standards, update dates, and plumber-vetting criteria explain the platform's boundaries."],
+    ],
+    outcomeTitle:"A transparent planning layer between the first question and the professional quote.",
+    outcomes:[["249","Free calculators and guides"],["0","Signup steps for core tools"],["1","Florida-focused planning platform"]],
+    proofNote:"Published estimates are informational planning ranges—not bids, quotes, guarantees, or professional advice. The live product documents its methodology and licensed-plumber vetting process.",
+    stack:["Interactive calculators","Florida cost research","Permit guidance","Searchable library","Licensed-plumber matching"],
+  },
 };
 
 function ProductCaseStudy({ slug }) {
@@ -890,6 +912,7 @@ export function App() {
   if(location.pathname==="/work/clawmonitor") page=<ProductCaseStudy slug="clawmonitor"/>;
   if(location.pathname==="/work/lava-leap") page=<ProductCaseStudy slug="lava-leap"/>;
   if(location.pathname==="/work/scamwatch") page=<ProductCaseStudy slug="scamwatch"/>;
+  if(location.pathname==="/work/fl-plumbing-tools") page=<ProductCaseStudy slug="fl-plumbing-tools"/>;
   if(location.pathname==="/services") page=<ServicesPage/>;
   if(location.pathname==="/insights") page=<InsightsPage/>;
   if(location.pathname.startsWith("/insights/")) page=<InsightArticle slug={location.pathname.split("/").filter(Boolean)[1]}/>;

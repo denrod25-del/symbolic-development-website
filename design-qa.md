@@ -1,3 +1,34 @@
+# SDDS Product 08 — FL Plumbing Tools QA
+
+## Source and implementation evidence
+
+- Live product source: `audits/fl-plumbing-tools-2026-08-11/source-desktop.png` and `source-mobile.png` captured from `https://flplumbingtools.com/`.
+- SDDS implementation: `implementation-desktop.png` at 1440 × 1000 and `implementation-mobile.png` at 390 × 844.
+- Combined comparison: `audits/fl-plumbing-tools-2026-08-11/comparison-desktop.png`.
+
+## Findings and resolution
+
+- P0: none.
+- P1: none.
+- P2: none open.
+- The source product's light teal interface is preserved as an authentic screenshot, while the case-study shell follows the approved dark SDDS portfolio system.
+- All claims are grounded in the live product: 249 free tools and guides, Florida focus, no required signup, documented methodology, permit and regional cost context, and licensed-plumber matching.
+- Planning ranges are clearly distinguished from bids, quotes, guarantees, and professional advice.
+
+## Responsive and functional verification
+
+- Desktop case-study route renders the correct title, proof metrics, live destination, full-width screenshot, narrative, system layers, outcome proof, and next-project path.
+- Mobile at 390 × 844 has deliberate heading wraps, readable copy, a contained screenshot, usable navigation, and no page-level horizontal overflow.
+- The real captured source image is used without cropping or distortion; both responsive image variants load successfully.
+- Static route metadata is generated for `/work/fl-plumbing-tools`.
+- Final severity count: P0 0, P1 0, P2 0.
+
+## Final result
+
+passed
+
+---
+
 # Homepage Hero Responsive QA — August 2026
 
 ## Source and target
