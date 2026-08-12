@@ -33,3 +33,5 @@ The production build prerenders route-specific metadata, generates the Sites-com
 ## Email delivery
 
 Contact and booking requests use the server-side `/api/contact` route. Configure the variables listed in `.env.example` in Vercel for production email delivery. The endpoint remains intentionally unavailable when any required variable is missing.
+
+Campaign parameters (`utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, and `utm_term`) are retained for the browser session and included with qualified inquiries so traffic sources can be evaluated without a CRM. Set the optional public `VITE_SCHEDULING_URL` to an HTTPS Calendly or equivalent booking page to expose live availability; when it is unset, the verified request-and-confirm flow remains active.

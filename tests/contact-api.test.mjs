@@ -38,3 +38,9 @@ test("requires inquiry qualification fields",async()=>{
   assert.equal(response.statusCode,400);
   assert.match(response.body.message,/project stage/i);
 });
+
+test("rejects oversized acquisition attribution",async()=>{
+  const response=responseMock();
+  await handler({method:"POST",headers:{"x-forwarded-for":"192.0.2.5"},body:{startedAt:Date.now()-2000,name:"Alex Morgan",email:"alex@example.com",company:"Meridian",stage:"Ready to build",timeline:"Within 1–2 months",engagement:"Focused build",budget:"$40k–$100k",message:"We need help replacing a brittle operational workflow with dependable software.",utm_campaign:"x".repeat(241)}},response);
+  assert.equal(response.statusCode,400);
+});
