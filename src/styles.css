@@ -104,9 +104,9 @@ main { width: 100%; }
 }
 .hero-backdrop { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .hero-art {
-  position: absolute; top: 50%; right: -8vw; transform: translateY(-50%);
-  width: min(72vh, 640px); height: min(72vh, 640px);
-  object-fit: cover; object-position: center;
+  position: absolute; top: 50%; right: clamp(-72px, -3vw, -28px); transform: translateY(-50%);
+  width: clamp(560px, min(52vw, 88vh), 1100px); height: clamp(560px, min(52vw, 88vh), 1100px);
+  object-fit: contain; object-position: center;
   opacity: .85;
 }
 .hero-fade {
@@ -539,7 +539,7 @@ footer { width: min(calc(100% - 80px), 1280px); min-height: 120px; margin: 0 aut
 @media (max-width: 1040px) {
   .nav-links { gap: 20px; }
   .hero { min-height: 860px; padding-bottom: 96px; }
-  .hero-art { right: -18vw; opacity: .65; }
+  .hero-art { right: -18vw; width: min(72vh, 640px); height: min(72vh, 640px); opacity: .65; }
   .hero-copy { width: min(560px, 100%); }
   .trust-strip-inner { grid-template-columns: repeat(2,1fr); }
   .trust-strip .trust-item:nth-child(3) { border-left: 0; }
@@ -582,7 +582,7 @@ footer { width: min(calc(100% - 80px), 1280px); min-height: 120px; margin: 0 aut
   .hero-copy { width: 100%; }
   .hero h1 { font-size: clamp(44px, 12vw, 64px); }
   .hero-lead { font-size: 17px; max-width: 32em; }
-  .hero-art { right: -30vw; bottom: -6vh; top: auto; transform: none; width: 60vh; height: 60vh; opacity: .5; }
+  .hero-art { right: -22vw; bottom: -4vh; top: auto; transform: none; width: min(88vw, 58vh); height: min(88vw, 58vh); opacity: .5; }
   .hero-signal { margin-top: 40px; }
   .trust-strip-inner { width: calc(100% - 48px); grid-template-columns: 1fr 1fr; }
   .trust-strip .trust-item { min-height: 96px; }
